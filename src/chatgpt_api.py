@@ -1,5 +1,6 @@
 import os
 import json
+import aiohttp
 from enum import Enum, auto
 from dataclasses import dataclass
 from datetime import datetime
@@ -48,6 +49,19 @@ def get_chat_gpt_model_list():
     return filtered_models
     # return filtered_models.sort(key=lambda x: x.created)
 
+async def invoke_chat_gpt_completion_async(model, messages, max_tokens=5):
+    url = f"{BASE_URL}/chat/completions"
+    data = {
+        "model": model,
+        "messages": messages,
+        "max_tokens": max_tokens
+    }
+    
+    async with aiohttp.ClientSession(headers=headers) as session:
+        async with session.post(url, data=json.dumps(data), timeout=300) as response:
+            async for line in response.content:
+                if line:
+                    yield json.loads(line)
 
 def invoke_chat_gpt_completion(model, messages, max_tokens=5):
     url = f"{BASE_URL}/chat/completions"
