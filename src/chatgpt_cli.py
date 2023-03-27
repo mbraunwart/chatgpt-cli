@@ -17,7 +17,7 @@ class ChatGPTCLI:
         ]
         #     # "usage": self.usage,
         #     # "status": self.status,
-        #     # "files": self.files,
+        #     # "files": self.files,py 
         for command in self.commands:
             command.set_parser(self.subparsers)
 

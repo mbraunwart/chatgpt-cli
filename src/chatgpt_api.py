@@ -1,10 +1,10 @@
 import os
 import json
 import aiohttp
+import requests
 from enum import Enum, auto
 from dataclasses import dataclass
 from datetime import datetime
-import requests
 
 headers = {
     "Authorization": f"Bearer {os.environ.get('ChatGPTToken')}",
@@ -49,7 +49,7 @@ def get_chat_gpt_model_list():
     return filtered_models
     # return filtered_models.sort(key=lambda x: x.created)
 
-async def invoke_chat_gpt_completion_async(model, messages, max_tokens=5):
+async def invoke_chat_gpt_completion_async(model, messages, max_tokens=25):
     url = f"{BASE_URL}/chat/completions"
     data = {
         "model": model,
@@ -63,7 +63,7 @@ async def invoke_chat_gpt_completion_async(model, messages, max_tokens=5):
                 if line:
                     yield json.loads(line)
 
-def invoke_chat_gpt_completion(model, messages, max_tokens=5):
+def invoke_chat_gpt_completion(model, messages, max_tokens=25):
     url = f"{BASE_URL}/chat/completions"
     data = {
         "model": model,
