@@ -44,7 +44,7 @@ class Command:
         self.examples = examples
         self.parser: Optional[argparse.ArgumentParser] = None
 
-    def set_parser(self, subparsers: argparse._SubParsersAction[Any]) -> None:
+    def set_parser(self, subparsers: Any) -> None:
         self.parser = subparsers.add_parser(
             self.command_name, help=self.help_text, epilog=self.examples
         )
@@ -93,7 +93,7 @@ class CompletionCommand(Command):
             "python main.py completion text-davinci-002 'Translate the following English text to French: Hello, World!'",
         )
 
-    def set_parser(self, subparsers: argparse._SubParsersAction[Any]) -> None:
+    def set_parser(self, subparsers: Any) -> None:
         super().set_parser(subparsers)
         assert self.parser is not None
         self.parser.add_argument(
