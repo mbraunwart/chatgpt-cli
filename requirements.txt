@@ -1,4 +1,9 @@
 requests==2.27.1
 termcolor==1.1.0
-colorama==0.4.4
-tabulate==0.8.11
+colorama==0.4.5
+tabulate==0.8.10
+aiohttp==3.8.4
+types-requests==2.27.1
+types-tabulate==0.8.10
+types-colorama==0.4.5
+types-termcolor==1.1.0
