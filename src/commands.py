@@ -48,7 +48,7 @@ class Command:
         self.parser = subparsers.add_parser(
             self.command_name, help=self.help_text, epilog=self.examples
         )
-        
+
     def run(self, cli: ChatGPTCLI) -> None:
         cli.parser.print_help()
 
