@@ -1,10 +1,10 @@
 import os
 import json
-import aiohttp
 import requests
 from enum import Enum, auto
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Dict, List, Any
 
 headers = {
     "Authorization": f"Bearer {os.environ.get('ChatGPTToken')}",
@@ -34,7 +34,7 @@ class Model:
     owned_by: str
 
 
-def get_chat_gpt_model_list():
+def get_chat_gpt_model_list() -> List[Model]:
     url = f"{BASE_URL}/models"
     response = requests.get(url, headers=headers)
     models = response.json()["data"]
@@ -51,21 +51,11 @@ def get_chat_gpt_model_list():
     ]
 
     return filtered_models
-    # return filtered_models.sort(key=lambda x: x.created)
 
 
-async def invoke_chat_gpt_completion_async(model, messages, max_tokens=25):
-    url = f"{BASE_URL}/chat/completions"
-    data = {"model": model, "messages": messages, "max_tokens": max_tokens}
-
-    async with aiohttp.ClientSession(headers=headers) as session:
-        async with session.post(url, data=json.dumps(data), timeout=300) as response:
-            async for line in response.content:
-                if line:
-                    yield json.loads(line)
-
-
-def invoke_chat_gpt_completion(model, messages, max_tokens=25):
+def invoke_chat_gpt_completion(
+    model: str, messages: List[Dict[str, str]], max_tokens: int = 50
+) -> Any:
     url = f"{BASE_URL}/chat/completions"
     data = {"model": model, "messages": messages, "max_tokens": max_tokens}
     response = requests.post(url, headers=headers, data=json.dumps(data), timeout=300)
@@ -74,7 +64,7 @@ def invoke_chat_gpt_completion(model, messages, max_tokens=25):
     return completion
 
 
-def get_chat_gpt_usage():
+def get_chat_gpt_usage() -> Dict[str, str]:
     url = f"{BASE_URL}/usage"
     response = requests.get(url, headers=headers, timeout=30)
     usage_data = response.json()
@@ -89,7 +79,7 @@ def get_chat_gpt_usage():
     return usage
 
 
-def get_chat_gpt_fine_tune_status(model):
+def get_chat_gpt_fine_tune_status(model: str) -> Dict[str, str]:
     url = f"{BASE_URL}/models/{model}"
     response = requests.get(url, headers=headers, timeout=30)
     status_data = response.json()
@@ -104,7 +94,7 @@ def get_chat_gpt_fine_tune_status(model):
     return status
 
 
-def get_chat_gpt_list_files():
+def get_chat_gpt_list_files() -> List[Dict[str, Any]]:
     url = f"{BASE_URL}/files"
     response = requests.get(url, headers=headers, timeout=30)
     files_data = response.json()["data"]

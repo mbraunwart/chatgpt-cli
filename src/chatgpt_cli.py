@@ -3,7 +3,7 @@ from commands import HelpCommand, ModelsCommand, CompletionCommand
 
 
 class ChatGPTCLI:
-    def __init__(self):
+    def __init__(self) -> None:
         self.parser = argparse.ArgumentParser(
             description="ChatGPT CLI is a powerful command-line tool for interacting with OpenAI's ChatGPT API.",
             epilog="Example usage: \npython main.py models\npython main.py completion gpt-3.5-turbo 'Translate the following English text to French: Hello, World!'",
@@ -20,7 +20,7 @@ class ChatGPTCLI:
 
         self.args = self.parser.parse_args()
 
-    def run(self):
+    def run(self) -> None:
         cli_command = next(
             (
                 command
