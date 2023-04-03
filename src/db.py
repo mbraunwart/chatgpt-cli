@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker, Session
 
 T = TypeVar("T")
 
+
 class Database:
     DATABASE_URL = "sqlite:///chatgpt_cli.db"
     engine = create_engine(DATABASE_URL)

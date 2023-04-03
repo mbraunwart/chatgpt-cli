@@ -12,7 +12,8 @@ from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
-class UserSession(Base): # type: ignore
+
+class UserSession(Base):  # type: ignore
     __tablename__ = "user_sessions"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -21,7 +22,7 @@ class UserSession(Base): # type: ignore
     last_active = Column(DateTime, default=None)
 
 
-class HistoryTopic(Base): # type: ignore
+class HistoryTopic(Base):  # type: ignore
     __tablename__ = "history_topics"
 
     id = Column(Integer, primary_key=True)
@@ -33,7 +34,7 @@ class HistoryTopic(Base): # type: ignore
     )
 
 
-class Message(Base): # type: ignore
+class Message(Base):  # type: ignore
     __tablename__ = "messages"
 
     id = Column(Integer, primary_key=True)
