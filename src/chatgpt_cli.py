@@ -1,5 +1,8 @@
 import argparse
-from commands import HelpCommand, ModelsCommand, CompletionCommand
+from commands import HelpCommand, TopicsCommand, ModelsCommand, CompletionCommand
+from typing import Optional, cast
+from db import Database
+from db_models import UserSession
 
 
 class ChatGPTCLI:
@@ -11,7 +14,20 @@ class ChatGPTCLI:
         )
         self.subparsers = self.parser.add_subparsers(dest="command")
 
-        self.commands = [HelpCommand(), ModelsCommand(), CompletionCommand()]
+        db = Database()
+        db.init_db()
+        self.db_session = db.SessionLocal()
+        self.db = db
+
+        self.current_topic_id: Optional[int] = None
+        self.user_session = self.load_active_user_session()
+
+        self.commands = [
+            HelpCommand(),
+            TopicsCommand(),
+            ModelsCommand(),
+            CompletionCommand(),
+        ]
         #     # "usage": self.usage,
         #     # "status": self.status,
         #     # "files": self.files,py
@@ -33,3 +49,15 @@ class ChatGPTCLI:
             cli_command.run(self)
         else:
             self.parser.print_help()
+
+    def load_active_user_session(self) -> UserSession:
+        user_session = self.db.get_active_user_session()
+        if user_session:
+            if user_session.topic is not None:
+                self.current_topic_id = cast(int, user_session.topic_id)
+                print(f"Current topic is {user_session.topic.name}")
+            # else:
+            #     print("No topic associated with this session, please create a new topic.\npython main.py topic --name \"new topic name\" --model \"gpt-3.5-turbo\"")
+            return user_session
+        else:
+            return self.db.create_user_session()
